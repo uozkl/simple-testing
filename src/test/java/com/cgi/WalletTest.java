@@ -7,6 +7,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -131,6 +136,25 @@ public class WalletTest {
         emptyWallet.deposit(10);
         emptyWallet.deposit(30);
         assertThat(emptyWallet.getBalance()).isEqualTo(40);
+    }
+
+
+    public static Stream<Arguments> accountDataProvider() {
+        return Stream.of(
+                Arguments.of(100, 50, 50),
+                Arguments.of(1, 1, 0),
+                Arguments.of(2, 1, 1),
+                Arguments.of(1, 0, 1),
+                Arguments.of(2, 0, 2)
+        );
+    }
+
+    @ParameterizedTest(name = "{index}: deposit = {0}, withdrawal = {1}, balance = {2}")
+    @MethodSource("accountDataProvider")
+    public void testDepositsWithdrawalsAndBalances(int deposit, int withdrawal, int balance) {
+        emptyWallet.deposit(deposit);
+        emptyWallet.withdrawal(withdrawal);
+        assertThat(emptyWallet.getBalance()).isEqualTo(balance);
     }
 
 
