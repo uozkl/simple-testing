@@ -14,6 +14,7 @@ public class Wallet {
     }
 
     public void withdrawal(int amount) {
+        // Comments for withdraw
         if (amount < 0) throw new IllegalArgumentException("You cannot withdrawal a negative value");
         if ((balance - amount) < 0) throw new IllegalArgumentException("The result will end up negative try again");
         this.balance -= amount;
